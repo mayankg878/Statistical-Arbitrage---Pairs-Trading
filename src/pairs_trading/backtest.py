@@ -182,3 +182,43 @@ def aggregate_portfolio(results: list[PairBacktestResult], max_capital_per_pair:
         portfolio = portfolio.add(r.daily_return.reindex(all_dates, fill_value=0.0) * weight, fill_value=0.0)
 
     return portfolio
+
+
+def aggregate_portfolio_capped(
+    results: list[PairBacktestResult],
+    pair_sectors: dict[str, str],
+    max_capital_per_pair: float,
+    max_capital_per_sector: float,
+) -> pd.Series:
+    """Like `aggregate_portfolio`, but also caps total weight per sector.
+
+    Correlated pairs sharing a sector (e.g. four energy-sector pairs) aren't
+    real diversification even if the pair-selection screen treats them as
+    independent picks. Each pair still starts at the same equal/per-pair-cap
+    weight as `aggregate_portfolio`; if a sector's pairs would sum to more
+    than `max_capital_per_sector`, every pair in that sector is scaled down
+    proportionally so the sector total hits the cap. The scaled-down capital
+    is simply left undeployed (cash) rather than redistributed to other
+    sectors, to keep the allocation rule simple and auditable.
+    """
+    if not results:
+        return pd.Series(dtype=float)
+
+    base_weight = min(max_capital_per_pair, 1.0 / len(results))
+
+    sector_totals: dict[str, float] = {}
+    for r in results:
+        sector = pair_sectors.get(r.pair_name, "unknown")
+        sector_totals[sector] = sector_totals.get(sector, 0.0) + base_weight
+
+    all_dates = sorted(set().union(*(r.daily_return.index for r in results)))
+    portfolio = pd.Series(0.0, index=all_dates)
+
+    for r in results:
+        sector = pair_sectors.get(r.pair_name, "unknown")
+        sector_total = sector_totals[sector]
+        scale = min(1.0, max_capital_per_sector / sector_total) if sector_total > 0 else 1.0
+        weight = base_weight * scale
+        portfolio = portfolio.add(r.daily_return.reindex(all_dates, fill_value=0.0) * weight, fill_value=0.0)
+
+    return portfolio

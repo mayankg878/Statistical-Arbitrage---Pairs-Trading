@@ -1,0 +1,21 @@
+{
+  "best_train_combo": {
+    "entry_z": 2.0,
+    "exit_z": 0.5,
+    "lookback": 30,
+    "median_fold_sharpe": -0.480512478275566
+  },
+  "test_summary": {
+    "sharpe_ratio": 0.23230151665916854,
+    "cagr": 0.000519154913549702,
+    "max_drawdown": -0.0042106889126641844,
+    "win_rate": 0.5532994923857868,
+    "avg_holding_period_days": 6.913705583756345,
+    "num_trades": 197,
+    "total_return": 0.0017955250820114177,
+    "median_fold_sharpe": 0.7009119430367938
+  },
+  "n_train_folds": 14,
+  "n_test_folds": 13,
+  "train_test_split_date": "2020-01-01"
+}

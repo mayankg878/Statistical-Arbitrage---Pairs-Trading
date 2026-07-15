@@ -1,0 +1,118 @@
+{
+  "grid_results": [
+    {
+      "entry_z": 1.5,
+      "exit_z": 0.0,
+      "lookback": 20,
+      "median_fold_sharpe": -1.343219011860028
+    },
+    {
+      "entry_z": 1.5,
+      "exit_z": 0.0,
+      "lookback": 30,
+      "median_fold_sharpe": -1.3030866056791233
+    },
+    {
+      "entry_z": 1.5,
+      "exit_z": 0.0,
+      "lookback": 45,
+      "median_fold_sharpe": -0.8826149151759306
+    },
+    {
+      "entry_z": 1.5,
+      "exit_z": 0.5,
+      "lookback": 20,
+      "median_fold_sharpe": -1.7619332530144822
+    },
+    {
+      "entry_z": 1.5,
+      "exit_z": 0.5,
+      "lookback": 30,
+      "median_fold_sharpe": -1.7972943623289912
+    },
+    {
+      "entry_z": 1.5,
+      "exit_z": 0.5,
+      "lookback": 45,
+      "median_fold_sharpe": -1.165312653672906
+    },
+    {
+      "entry_z": 2.0,
+      "exit_z": 0.0,
+      "lookback": 20,
+      "median_fold_sharpe": -1.1408535050025894
+    },
+    {
+      "entry_z": 2.0,
+      "exit_z": 0.0,
+      "lookback": 30,
+      "median_fold_sharpe": -0.9174234125853307
+    },
+    {
+      "entry_z": 2.0,
+      "exit_z": 0.0,
+      "lookback": 45,
+      "median_fold_sharpe": -1.1978731359324797
+    },
+    {
+      "entry_z": 2.0,
+      "exit_z": 0.5,
+      "lookback": 20,
+      "median_fold_sharpe": -1.2412968998712905
+    },
+    {
+      "entry_z": 2.0,
+      "exit_z": 0.5,
+      "lookback": 30,
+      "median_fold_sharpe": -0.480512478275566
+    },
+    {
+      "entry_z": 2.0,
+      "exit_z": 0.5,
+      "lookback": 45,
+      "median_fold_sharpe": -1.4494098369158177
+    },
+    {
+      "entry_z": 2.5,
+      "exit_z": 0.0,
+      "lookback": 20,
+      "median_fold_sharpe": -1.272421523569843
+    },
+    {
+      "entry_z": 2.5,
+      "exit_z": 0.0,
+      "lookback": 30,
+      "median_fold_sharpe": -0.8472752354154409
+    },
+    {
+      "entry_z": 2.5,
+      "exit_z": 0.0,
+      "lookback": 45,
+      "median_fold_sharpe": -0.9359458646069827
+    },
+    {
+      "entry_z": 2.5,
+      "exit_z": 0.5,
+      "lookback": 20,
+      "median_fold_sharpe": -0.9699756756515958
+    },
+    {
+      "entry_z": 2.5,
+      "exit_z": 0.5,
+      "lookback": 30,
+      "median_fold_sharpe": -0.9953718597860004
+    },
+    {
+      "entry_z": 2.5,
+      "exit_z": 0.5,
+      "lookback": 45,
+      "median_fold_sharpe": -0.879154643227025
+    }
+  ],
+  "best": {
+    "entry_z": 2.0,
+    "exit_z": 0.5,
+    "lookback": 30,
+    "median_fold_sharpe": -0.480512478275566
+  }
+}

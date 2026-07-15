@@ -1,7 +1,12 @@
 import numpy as np
 import pandas as pd
 
-from pairs_trading.backtest import PairBacktestResult, aggregate_portfolio, run_pair_backtest
+from pairs_trading.backtest import (
+    PairBacktestResult,
+    aggregate_portfolio,
+    aggregate_portfolio_capped,
+    run_pair_backtest,
+)
 
 
 def _make_oscillating_cointegrated_series(n=400, seed=0):
@@ -71,4 +76,43 @@ def test_aggregate_portfolio_combines_pairs():
 
 def test_aggregate_portfolio_empty():
     portfolio = aggregate_portfolio([], max_capital_per_pair=0.5)
+    assert portfolio.empty
+
+
+def test_sector_cap_scales_down_overweight_sector():
+    dates = pd.date_range("2020-01-01", periods=5, freq="D")
+    # 3 pairs, all energy: equal-weight would give each 1/3, but the sector
+    # cap of 0.4 means the 3 combined (1.0 uncapped) must scale down to 0.4.
+    results = [
+        PairBacktestResult(pair_name=f"E{i}/E{i+1}", trades=[], daily_return=pd.Series([0.03] * 5, index=dates))
+        for i in range(3)
+    ]
+    pair_sectors = {r.pair_name: "energy" for r in results}
+
+    portfolio = aggregate_portfolio_capped(
+        results, pair_sectors, max_capital_per_pair=1.0, max_capital_per_sector=0.4,
+    )
+    # each pair's base weight (uncapped by per-pair cap) is 1/3; sector total
+    # 1.0 > 0.4 cap -> scale factor 0.4; total portfolio return = 3 * (1/3 * 0.4) * 0.03
+    expected = 3 * (1 / 3 * 0.4) * 0.03
+    assert np.allclose(portfolio.values, expected)
+
+
+def test_sector_cap_no_effect_when_under_cap():
+    dates = pd.date_range("2020-01-01", periods=5, freq="D")
+    results = [
+        PairBacktestResult(pair_name="A/B", trades=[], daily_return=pd.Series([0.02] * 5, index=dates)),
+        PairBacktestResult(pair_name="C/D", trades=[], daily_return=pd.Series([0.04] * 5, index=dates)),
+    ]
+    pair_sectors = {"A/B": "banks", "C/D": "airlines"}
+
+    capped = aggregate_portfolio_capped(
+        results, pair_sectors, max_capital_per_pair=0.5, max_capital_per_sector=0.5,
+    )
+    uncapped = aggregate_portfolio(results, max_capital_per_pair=0.5)
+    assert np.allclose(capped.values, uncapped.values)
+
+
+def test_aggregate_portfolio_capped_empty():
+    portfolio = aggregate_portfolio_capped([], {}, max_capital_per_pair=0.5, max_capital_per_sector=0.5)
     assert portfolio.empty

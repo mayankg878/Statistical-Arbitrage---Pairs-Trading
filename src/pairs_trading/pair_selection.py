@@ -43,6 +43,32 @@ def _static_hedge_ratio(y: pd.Series, x: pd.Series) -> float:
     return float(model.params[1])
 
 
+def benjamini_hochberg_threshold(pvalues: list[float], fdr_alpha: float = 0.10) -> float:
+    """Largest p-value cutoff such that the false discovery rate is
+    controlled at `fdr_alpha`, given `m` independent-ish hypothesis tests.
+
+    Standard BH step-up procedure: sort p-values ascending, find the
+    largest k with p_(k) <= (k/m)*fdr_alpha; every p-value at or below
+    p_(k) is declared significant. Returns 0.0 (nothing survives) if no
+    such k exists.
+
+    This matters here because screening ~200 within-sector pairs at a flat
+    p<0.05 implies ~10 expected false positives even if no pair in the
+    universe were genuinely cointegrated -- BH control keeps the expected
+    fraction of false discoveries among *declared* pairs bounded instead.
+    """
+    m = len(pvalues)
+    if m == 0:
+        return 0.0
+    sorted_p = np.sort(np.asarray(pvalues, dtype=float))
+    ranks = np.arange(1, m + 1)
+    eligible = sorted_p <= (ranks / m) * fdr_alpha
+    if not eligible.any():
+        return 0.0
+    k = np.max(np.where(eligible)[0]) + 1
+    return float(sorted_p[k - 1])
+
+
 def find_cointegrated_pairs(
     prices: pd.DataFrame,
     sector_universe: dict[str, list[str]],
@@ -52,6 +78,8 @@ def find_cointegrated_pairs(
     max_pairs: int = 12,
     min_hedge_ratio: float = 0.3,
     max_hedge_ratio: float = 3.0,
+    use_fdr_correction: bool = False,
+    fdr_alpha: float = 0.10,
 ) -> list[PairCandidate]:
     """Screen within-sector pairs for cointegration on the formation window.
 
@@ -62,9 +90,15 @@ def find_cointegrated_pairs(
     genuine linear relationship between the two names. That's a spurious
     "cointegrated pair" in practice, not a tradeable one.
 
+    `use_fdr_correction`: if True, `pvalue_threshold` is ignored in favor of
+    a Benjamini-Hochberg cutoff computed from the p-values of *every*
+    within-sector pair tested this call (see `benjamini_hochberg_threshold`).
+    Off by default to keep the original flat-threshold behavior for
+    existing callers; the walk-forward pipeline turns it on.
+
     Returns candidates sorted by p-value (ascending), truncated to max_pairs.
     """
-    candidates: list[PairCandidate] = []
+    raw: list[tuple[str, str, float, pd.Series, pd.Series]] = []
 
     for tickers in sector_universe.values():
         available = [t for t in tickers if t in prices.columns]
@@ -77,22 +111,31 @@ def find_cointegrated_pairs(
             y, x = y.loc[common_idx], x.loc[common_idx]
 
             _, pvalue, _ = coint(y, x)
-            if pvalue >= pvalue_threshold:
-                continue
+            raw.append((y_ticker, x_ticker, pvalue, y, x))
 
-            beta = _static_hedge_ratio(y, x)
-            if not (min_hedge_ratio <= abs(beta) <= max_hedge_ratio):
-                continue
+    if use_fdr_correction:
+        effective_threshold = benjamini_hochberg_threshold([r[2] for r in raw], fdr_alpha)
+    else:
+        effective_threshold = pvalue_threshold
 
-            spread = y - beta * x
-            hl = half_life_of_mean_reversion(spread)
-            if not (min_half_life <= hl <= max_half_life):
-                continue
+    candidates: list[PairCandidate] = []
+    for y_ticker, x_ticker, pvalue, y, x in raw:
+        if pvalue > effective_threshold:
+            continue
 
-            candidates.append(PairCandidate(
-                y=y_ticker, x=x_ticker, pvalue=pvalue, hedge_ratio=beta, half_life=hl,
-                residual_variance=float(spread.var()),
-            ))
+        beta = _static_hedge_ratio(y, x)
+        if not (min_hedge_ratio <= abs(beta) <= max_hedge_ratio):
+            continue
+
+        spread = y - beta * x
+        hl = half_life_of_mean_reversion(spread)
+        if not (min_half_life <= hl <= max_half_life):
+            continue
+
+        candidates.append(PairCandidate(
+            y=y_ticker, x=x_ticker, pvalue=pvalue, hedge_ratio=beta, half_life=hl,
+            residual_variance=float(spread.var()),
+        ))
 
     candidates.sort(key=lambda c: c.pvalue)
     return candidates[:max_pairs]
