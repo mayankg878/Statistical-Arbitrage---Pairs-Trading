@@ -1,0 +1,13 @@
+for_me_readme.md
+
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+htmlcov/
+
+data/*.csv
+
+.DS_Store
+*.egg-info/

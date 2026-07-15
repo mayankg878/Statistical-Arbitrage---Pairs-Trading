@@ -1,0 +1,145 @@
+{
+  "portfolio": {
+    "sharpe_ratio": -0.10289958756865238,
+    "cagr": -0.0007761826151829743,
+    "max_drawdown": -0.013699820218936232,
+    "win_rate": 0.5318352059925093,
+    "avg_holding_period_days": 6.419475655430712,
+    "num_trades": 267,
+    "total_return": -0.0023113702345869402
+  },
+  "per_pair": [
+    {
+      "pair": "AAL/ALK",
+      "sharpe_ratio": -0.26520857206971676,
+      "cagr": -0.00857044078764957,
+      "max_drawdown": -0.05186002364556708,
+      "win_rate": 0.5172413793103449,
+      "avg_holding_period_days": 4.275862068965517,
+      "num_trades": 29,
+      "total_return": -0.025325152479036883
+    },
+    {
+      "pair": "XOM/MPC",
+      "sharpe_ratio": 0.23527522059890035,
+      "cagr": 0.004696079828740762,
+      "max_drawdown": -0.032757957069816324,
+      "win_rate": 0.6052631578947368,
+      "avg_holding_period_days": 4.631578947368421,
+      "num_trades": 38,
+      "total_return": 0.014060233064837835
+    },
+    {
+      "pair": "TXN/NXPI",
+      "sharpe_ratio": -0.40352644312795627,
+      "cagr": -0.0009213570492472289,
+      "max_drawdown": -0.005466386193848316,
+      "win_rate": 0.6363636363636364,
+      "avg_holding_period_days": 5.757575757575758,
+      "num_trades": 33,
+      "total_return": -0.0027432862524497947
+    },
+    {
+      "pair": "DHI/LEN",
+      "sharpe_ratio": -1.0608171518652056,
+      "cagr": -0.0013945977999296755,
+      "max_drawdown": -0.0043550539346467465,
+      "win_rate": 0.3888888888888889,
+      "avg_holding_period_days": 5.388888888888889,
+      "num_trades": 36,
+      "total_return": -0.004150386804759321
+    },
+    {
+      "pair": "AEP/EXC",
+      "sharpe_ratio": -0.633435126661377,
+      "cagr": -0.007000601870671974,
+      "max_drawdown": -0.022864786759575595,
+      "win_rate": 0.5,
+      "avg_holding_period_days": 8.15625,
+      "num_trades": 32,
+      "total_return": -0.02071863158294518
+    },
+    {
+      "pair": "XOM/VLO",
+      "sharpe_ratio": -0.477484987190762,
+      "cagr": -0.002885512367011067,
+      "max_drawdown": -0.014431133169250376,
+      "win_rate": 0.5,
+      "avg_holding_period_days": 6.1875,
+      "num_trades": 32,
+      "total_return": -0.008574740853922624
+    },
+    {
+      "pair": "SLB/PSX",
+      "sharpe_ratio": -0.5726421389698192,
+      "cagr": -0.0038391914303140817,
+      "max_drawdown": -0.012575468598752582,
+      "win_rate": 0.4722222222222222,
+      "avg_holding_period_days": 5.333333333333333,
+      "num_trades": 36,
+      "total_return": -0.011397964456774656
+    },
+    {
+      "pair": "VLO/OXY",
+      "sharpe_ratio": 0.330006342037943,
+      "cagr": 0.012487700159203419,
+      "max_drawdown": -0.05403566322762121,
+      "win_rate": 0.6451612903225806,
+      "avg_holding_period_days": 12.225806451612904,
+      "num_trades": 31,
+      "total_return": 0.03767732923606748
+    }
+  ],
+  "selected_pairs": [
+    {
+      "pair": "AAL/ALK",
+      "pvalue": 0.003492605698363703,
+      "static_beta": 0.3563063951283997,
+      "half_life": 17.443093546949186
+    },
+    {
+      "pair": "XOM/MPC",
+      "pvalue": 0.006993014809867809,
+      "static_beta": 0.8282338854366879,
+      "half_life": 15.412382059727335
+    },
+    {
+      "pair": "TXN/NXPI",
+      "pvalue": 0.013319690001413701,
+      "static_beta": 0.5362679325949817,
+      "half_life": 19.189688764256385
+    },
+    {
+      "pair": "DHI/LEN",
+      "pvalue": 0.014660058190327991,
+      "static_beta": 1.0199338383932872,
+      "half_life": 15.057248840295149
+    },
+    {
+      "pair": "AEP/EXC",
+      "pvalue": 0.017303396704691814,
+      "static_beta": 1.002307196989288,
+      "half_life": 26.727084328012594
+    },
+    {
+      "pair": "XOM/VLO",
+      "pvalue": 0.019140560502335528,
+      "static_beta": 0.8558842376380326,
+      "half_life": 25.33491698792836
+    },
+    {
+      "pair": "SLB/PSX",
+      "pvalue": 0.02440077481502376,
+      "static_beta": 0.6918883325109388,
+      "half_life": 18.78973576950507
+    },
+    {
+      "pair": "VLO/OXY",
+      "pvalue": 0.03140770355310591,
+      "static_beta": 1.410254997816192,
+      "half_life": 24.664783065418103
+    }
+  ],
+  "backtest_start": "2023-07-15",
+  "backtest_end": "2026-07-15"
+}
